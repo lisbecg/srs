@@ -68,7 +68,7 @@ def notefile_new(request):
             notefile.author = request.user
             notefile.created_date = timezone.now()
             notefile.save()
-            return redirect('create_notefile', pk=notefile.pk)
+            return redirect('notecard_list')
     else:
         form = NotefileForm()
     return render(request, 'srs/create_notefile.html', {'form': form}) 
