@@ -1,0 +1,17 @@
+{% extends 'srs/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<h2 style="margin-left: 55%;">Activate Notecard</h2>
+
+<form method="POST">{% csrf_token %}
+    <h2>By clicking in the activate button, you agree to activate this notecard.</h2>
+    <button type="submit" class="save btn btn-default">Activate</button>
+    <a href="{% url 'notecard_list' pk=pk %}" class="cancel btn btn-default">Cancel</a>
+</form>
+
+<div class="backdrop"></div>
+<script src="http://www.wiris.net/demo/editor/editor"></script>
+
+{% endblock %}
+

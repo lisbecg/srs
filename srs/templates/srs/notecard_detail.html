@@ -21,12 +21,55 @@
         <p>{{ notecard.keywords }}</p>
         <h2>Body:</h2>
         <p class="blue-links">{% autoescape off %}{{ notecard.body }}{% endautoescape %}</p>
-        {% if equations %}
-          <h2>Equations:</h2>
-          {% for equation in equations %}
-              <p class="equation-container">{% autoescape off %}{{equation.equation}}{% endautoescape %}</p>
-          {% endfor %}
-        {% endif %}
+
+        <div>
+            {% if equations %}
+                <h2>Equations:</h2>
+                <table>
+                    {% for equation in equations %}
+                        <tr>
+                            <td> <div class="equation-container" style="color: white;" >{% autoescape off %}{{equation.equation}}{% endautoescape %}</div></td>
+                            <td> <button class="insert-link btn btn-default" id="myBtn{{equation.id}}" data-target="#explainEquationModal{{ equation.id }}">Explain</button></td>
+                        </tr>
+
+                        <div class="modal link-modal" id="explainEquationModal{{ equation.id }}" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button style="margin-top: 0.75%; color: black; font-size: x-large;" id="close-btn{{ equation.id }}" data-dismiss="modal" class="close-btn btn">&times;</button>
+                                        <h4 style="margin-left: 25%; display: inline;" class="modal-title">Explain</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Display Explanation for </p>
+                                        <div style="margin-left: 10%; color: white;" class="equation-container">{% autoescape off %}{{equation.equation}}{% endautoescape %}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var a = "{{ equation.id }}";
+
+                            $("#myBtn"+a).click(function(){
+                                // Open modal​
+                                $(".backdrop").show();
+                                $("#explainEquationModal"+a).fadeIn();
+                            });
+
+                            $("#close-btn"+a).click(function(){
+                                // Open modal​
+                                $(".backdrop").hide();
+                                $("#explainEquationModal"+a).fadeOut();
+                                // $("#display").val('');
+                                // $("#url").val('');
+                                $('#err').hide();
+                            });
+                        </script>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
 
         {% if images %}
           <h2>Images:</h2>

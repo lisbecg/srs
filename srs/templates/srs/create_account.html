@@ -1,5 +1,11 @@
 {% extends 'srs/base.html' %}
 
 {% block content %}
-    <h1>Create Account Here</h1>
+    <div class="container">
+        <h1 id="signup-header">Create Account Here</h1>
+        <form method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="signup btn btn-default">Submit</button>
+        </form>
+    </div>
 {% endblock %}

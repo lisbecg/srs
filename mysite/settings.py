@@ -124,3 +124,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static') #Path for static files
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'srs/media') #Path for media files
+
+# Redirect to welcome view after log out.
+LOGOUT_REDIRECT_URL = 'welcome'

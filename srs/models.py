@@ -59,6 +59,8 @@ class Notecard(models.Model):
             default=timezone.now)
     notefile = models.ForeignKey(Notefile, on_delete=models.CASCADE)
     hiddenField = models.TextField(blank=True, null=True)
+    # Indicates whether the notecard is activated or deactivated.
+    activate = models.BooleanField(default=True)
 
     def create(self):
         self.created_date = timezone.now()

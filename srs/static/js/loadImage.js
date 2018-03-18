@@ -11,7 +11,6 @@ $('.image-trigger').click(function(e){
 
 $('.image-close').click(function(e){
 	// Close modal
-  console.log("Hiding");
 	$(".backdrop").hide();
 	$("#imagemodal").hide();
 });

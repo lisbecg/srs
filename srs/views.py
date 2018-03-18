@@ -17,8 +17,8 @@ from pytube import YouTube
 from PIL import Image
 from django.contrib.auth.decorators import login_required
 
-from srs.forms import NotefileForm, DirectoryForm, ImportForm, VideoForm, AudioForm, DocumentForm, NotecardForm, \
-    EquationForm, ImageForm, DuplicateNotecardForm
+from srs.forms import NotefileForm, DirectoryForm, ImportForm, VideoForm, AudioForm, DocumentForm, NotecardForm, DeleteNotecardForm, \
+    EquationForm, ImageForm, DuplicateNotecardForm, RegistrationForm
 from srs.models import Directory, Notefile, Notecard, Video, Audio, Document, Equation, Image
 
 def logout_view(request):
@@ -37,11 +37,20 @@ def about(request):
 def contact(request):
     return render(request, 'srs/contact.html')
 
-def login(request):
-    return render(request, 'srs/login.html')
+#def login(request):
+#    return render(request, 'srs/login.html')
 
 def create_account(request):
-    return render(request, 'srs/create_account.html')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = RegistrationForm()
+
+    args = {'form': form}
+    return render(request, 'srs/create_account.html', args)
 
 def getPath(request, current_directory):
     home_directory = Directory.objects.filter(author=request.user).get(parent_directory__isnull = True)
@@ -102,7 +111,7 @@ def image_list(request):
 def create_directory(request, pk):
     duplicate = False
     parent = get_object_or_404(Directory, pk=pk)
-    home_directory = Directory.objects.get(parent_directory__isnull = True)
+    home_directory = Directory.objects.filter(parent_directory__isnull = True)
 
     # calculate path
     path = getPath(request, parent)
@@ -146,6 +155,62 @@ def create_notecard(request, pk):
     else:
         form = NotecardForm()
     return render(request, 'srs/create_notecard.html', {'form': form, 'path': path, "pk": pk})
+
+@login_required
+def edit_notecard(request, pk):
+    notecardToEdit = get_object_or_404(Notecard, pk=pk)
+    parentPK = notecardToEdit.notefile.pk
+
+    if request.method == "POST":
+        form = NotecardForm(request.POST, instance=notecardToEdit)
+        if form.is_valid():
+            notecard = form.save(commit=False)
+            notecard.author = request.user
+            notecard.save()
+            return redirect('notecard_list', pk=parentPK)
+    else:
+        form = NotecardForm(instance=notecardToEdit)
+    template = 'srs/edit_notecard.html'
+    context = {'form': form, "pk": parentPK}
+    return render(request, template, context)
+
+@login_required
+def delete_notecard(request, pk):
+    notecardToDelete = get_object_or_404(Notecard, pk=pk)
+    parentPK = notecardToDelete.notefile.pk
+
+    if request.method == "POST":
+        form = DeleteNotecardForm(request.POST, instance=notecardToDelete)
+        notecard = form.save(commit=False)
+        notecard.author = request.user
+        notecard.created_date = timezone.now()
+        notecard.activate = False
+        notecard.save()
+        return redirect('notecard_list', pk=parentPK)
+    else:
+        form = NotecardForm(instance=notecardToDelete)
+    template = 'srs/delete_notecard.html'
+    context = {'form': form, "pk": parentPK}
+    return render(request, template, context)
+
+@login_required
+def activate_notecard(request, pk):
+    notecardToActivate = get_object_or_404(Notecard, pk=pk)
+    parentPK = notecardToActivate.notefile.pk
+
+    if request.method == "POST":
+        form = DeleteNotecardForm(request.POST, instance=notecardToActivate)
+        notecard = form.save(commit=False)
+        notecard.author = request.user
+        notecard.created_date = timezone.now()
+        notecard.activate = True
+        notecard.save()
+        return redirect('notecard_list', pk=parentPK)
+    else:
+        form = NotecardForm(instance=notecardToActivate)
+    template = 'srs/activate_notecard.html'
+    context = {'form': form, "pk": parentPK}
+    return render(request, template, context)
 
 @login_required
 def duplicate_notecard(request, pk):
