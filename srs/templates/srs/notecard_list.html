@@ -5,6 +5,17 @@
 {% block site_content %}
 <script type="text/javascript" src="{% static 'js/notecard_navigate.js' %}"></script>
 <script>
+    function showSelectedNotecardLabel() {
+        /* Checks if the index exits.
+         * If so, it checks if the index is in the range of indexes of the current view.
+         * If so, it replaces the actual view with the show label view for this specific notecard.
+         */
+        if(INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+            var PK = activateNotecards[INDEX - 1].pk;
+            window.location.replace('http://'+window.location.host+'/srs/notecard_label/'+PK+'/');
+        }
+    }
+
     /**
      * Executes the click for the selected notecard by the cursor.
      */
@@ -45,18 +56,18 @@
         }
     }
 </script>
-    <div title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
+    <div style="margin-top: 15%" title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
     <a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
     <a onclick="replaceView()"><h2>Edit</h2></a>
     <a href="{% url 'create_notecard' pk=pk %}"><h2>Make</h2></a>
     <a onclick="deactivate()"><h2>Delete</h2></a>
     <a onclick="clickSelectedNotecard()"><h2>Select</h2></a>
-    <a><h2>Subject</h2></a>
+    <!--<a><h2>Subject</h2></a>-->
     <!--<a><h2>Alpha</h2></a>-->
     <!--<a><h2>Revu</h2></a>-->
     <a href="{% url 'import_notecard' pk=pk %}"><h2>Import</h2></a>
     <a href="{% url 'export_notecard' pk=pk %}"><h2>Export</h2></a>
-    <a><h2>Label</h2></a>
+    <a onclick="showSelectedNotecardLabel()"><h2>Label</h2></a>
     <a href="{% url 'notefile_detail' pk=pk %}"><h2>Back</h2></a>
 {% endblock %}
 

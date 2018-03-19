@@ -367,6 +367,20 @@ def notecard_detail(request, pk):
     #return render(request, 'srs/notecard_detail.html', {'notecard': notecard, 'pk': notecard.notefile.pk, 'path': path, 'videos': videos, 'audios': audios, 'documents': documents, 'equations': equations})
 
 @login_required
+def notecard_label(request, pk):
+    notecard = get_object_or_404(Notecard, pk=pk)
+
+    # calculate path
+    notefile_Name = notecard.notefile
+    path = getPath(request, notefile_Name.directory) + notefile_Name.name + "/"
+    if len(notecard.name) > 20:
+        path += notecard.name[:20] + "..."
+    else:
+        path += notecard.name
+
+    return render(request, 'srs/notecard_label.html', {'notecard': notecard, 'pk': notecard.notefile.pk, 'path': path})
+
+@login_required
 def create_video(request, pk):
     youtubeError = False
     badSource = False

@@ -28,6 +28,7 @@ urlpatterns = [
 	url(r'^srs/directory_list/(?P<pk>\d+)/$', views.directory_content, name='directory_content'),
 	url(r'^srs/create_notecard/(?P<pk>\d+)/$', views.create_notecard, name='create_notecard'),
     url(r'^srs/edit_notecard/(?P<pk>\d+)/$', views.edit_notecard, name='edit_notecard'),
+    url(r'^srs/notecard_label/(?P<pk>\d+)/$', views.notecard_label, name='notecard_label'),
     url(r'^srs/delete_notecard/(?P<pk>\d+)/$', views.delete_notecard, name='delete_notecard'),
     url(r'^srs/activate_notecard/(?P<pk>\d+)/$', views.activate_notecard, name='activate_notecard'),
     url(r'^srs/duplicate_notecard/(?P<pk>\d+)/$', views.duplicate_notecard, name='duplicate_notecard'),
