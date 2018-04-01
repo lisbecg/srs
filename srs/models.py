@@ -58,6 +58,9 @@ class Notecard(models.Model):
     created_date = models.DateTimeField(
             default=timezone.now)
     notefile = models.ForeignKey(Notefile, on_delete=models.CASCADE)
+    hiddenField = models.TextField(blank=True, null=True)
+    # Indicates whether the notecard is activated or deactivated.
+    activate = models.BooleanField(default=True)
 
     def create(self):
         self.created_date = timezone.now()
@@ -128,3 +131,19 @@ class Equation(models.Model):
 
     def __str__(self):
         return self.equation
+
+class Image(models.Model):
+    author = models.ForeignKey('auth.User')
+    source = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/%Y/%m/%d/')
+    notecard = models.ForeignKey(Notecard, null=True, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(
+            default=timezone.now)
+
+    def create(self):
+        self.created_date = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return self.name

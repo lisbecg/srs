@@ -4,9 +4,11 @@
 {% block site_content %}
     <a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
     <a href="{% url 'create_equation' pk=notecard.pk %}" class="top-menu"><h2>Add Equation</h2></a>
+    <a href="{% url 'create_image' pk=notecard.pk %}" class="top-menu"><h2>Add Image &nbsp;&nbsp;<i class="fa fa-file-image-o"></i></h2></a>
     <a href="{% url 'create_video' pk=notecard.pk %}" class="top-menu"><h2>Add Video &nbsp;&nbsp;<i class="fa fa-video-camera"></i></h2></a>
     <a href="{% url 'create_audio' pk=notecard.pk %}" class="top-menu"><h2>Add Audio &nbsp;&nbsp;<i class="fa fa-music"></i></h2></a>
     <a href="{% url 'create_document' pk=notecard.pk %}" class="top-menu"><h2>Add Document &nbsp;&nbsp;<i class="fa fa-file"></i></h2></a>
+    <a href="{% url 'duplicate_notecard' pk=notecard.pk %}" class="top-menu"><h2>Duplicate Notecard</h2></a>
     <a href="{% url 'notecard_list' pk=pk %}"><h2>Back</h2></a>
     <a ><h2>Help</h2></a>
 {% endblock %}
@@ -18,11 +20,64 @@
         <h2>Keywords:</h2>
         <p>{{ notecard.keywords }}</p>
         <h2>Body:</h2>
-        <p>{{ notecard.body }}</p>
-        {% if equations %}
-          <h2>Equations:</h2>
-          {% for equation in equations %}
-              <p class="equation-container">{{equation.equation}}</p>
+        <p class="blue-links">{% autoescape off %}{{ notecard.body }}{% endautoescape %}</p>
+
+        <div>
+            {% if equations %}
+                <h2>Equations:</h2>
+                <table>
+                    {% for equation in equations %}
+                        <tr>
+                            <td> <div class="equation-container" style="color: white;" >{% autoescape off %}{{equation.equation}}{% endautoescape %}</div></td>
+                            <td> <button class="insert-link btn btn-default" id="myBtn{{equation.id}}" data-target="#explainEquationModal{{ equation.id }}">Explain</button></td>
+                        </tr>
+
+                        <div class="modal link-modal" id="explainEquationModal{{ equation.id }}" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button style="margin-top: 0.75%; color: black; font-size: x-large;" id="close-btn{{ equation.id }}" data-dismiss="modal" class="close-btn btn">&times;</button>
+                                        <h4 style="margin-left: 25%; display: inline;" class="modal-title">Explain</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Display Explanation for </p>
+                                        <div style="margin-left: 10%; color: white;" class="equation-container">{% autoescape off %}{{equation.equation}}{% endautoescape %}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var a = "{{ equation.id }}";
+
+                            $("#myBtn"+a).click(function(){
+                                // Open modal​
+                                $(".backdrop").show();
+                                $("#explainEquationModal"+a).fadeIn();
+                            });
+
+                            $("#close-btn"+a).click(function(){
+                                // Open modal​
+                                $(".backdrop").hide();
+                                $("#explainEquationModal"+a).fadeOut();
+                                // $("#display").val('');
+                                // $("#url").val('');
+                                $('#err').hide();
+                            });
+                        </script>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+
+        {% if images %}
+          <h2>Images:</h2>
+          {% for image in images %}
+            <div class="video_container">
+                <p class="vid_info">{{image.name}}</p>
+                <a data-path="/media/{{image.image}}" title="{{image.name}}" data-source="{{image.source}}" class="image-trigger"><img src="/media/{{image.image}}" width="190px" height="140px"></a>
+            </div>
           {% endfor %}
         {% endif %}
 
@@ -31,7 +86,7 @@
           {% for video in videos %}
               <div class="video_container">
                   <p class="vid_info">{{video.title}}</p>
-                  <a class="video_select" data-path="/media/{{video.video}}" title="{{video.title}}" data-source="{{video.url}}"><img src="{% static 'images/generic_thumbnail.jpg' %}" width="190px" height="140px"></a>
+                  <a class="video_select" data-path="/media/{{video.video}}" title="{{video.title}}" data-source="{{video.url}}"><img src="/media/{{video.thumbnail}}" width="190px" height="140px"></a>
               </div>
           {% endfor %}
         {% endif %}
@@ -55,6 +110,17 @@
               </p>
           {% endfor %}
         {% endif %}
+
+        <!-- Image Modal -->
+        <div id="imagemodal" class="image-modal">
+          <span class="image-close">&times;</span>
+
+          <!-- Modal content-->
+          <img class="image-modal-content" id="modal-image">
+
+          <strong><div id="image-caption"></div></strong>
+          <strong><div id="image-source"></div></strong>
+        </div>
 
         <!-- Video Modal -->
         <div id="vidmodal" class="modal video-modal" role="dialog">
@@ -104,9 +170,11 @@
         </div>
 
         <div class="backdrop"></div>
+
     </div>
 
     {% load static %}
+    <script type="text/javascript" src="{% static 'js/loadImage.js' %}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
     <script type="text/javascript" src="{% static 'js/loadAudio.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/loadVideo.js' %}"></script>

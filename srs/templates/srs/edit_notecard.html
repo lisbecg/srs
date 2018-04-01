@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<h2>Create Notecard</h2>
+<h2>Edit Notecard</h2>
 <form method="POST">{% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="save btn btn-default">Save</button>
@@ -14,7 +14,6 @@
 <!-- Equation Modal -->
 <div id="eqnmodal" class="modal equation-modal" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -28,14 +27,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <!-- Link Modal -->
 <div id="linkmodal" class="modal link-modal" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -53,7 +50,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -62,5 +58,4 @@
 <script src="http://www.wiris.net/demo/editor/editor"></script>
 <script src="{% static 'js/insertEquation.js' %}"></script>
 <script src="{% static 'js/insertLink.js' %}"></script>
-
 {% endblock %}

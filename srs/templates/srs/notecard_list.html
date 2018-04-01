@@ -1,20 +1,70 @@
 {% extends 'srs/base_srs.html' %}
 {% load app_filters static %}
 
-{% block site_content %}
 
-    <div title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
+{% block site_content %}
+<script type="text/javascript" src="{% static 'js/notecard_navigate.js' %}"></script>
+<script>
+    function showSelectedNotecardLabel() {
+        /* Checks if the index exits.
+         * If so, it checks if the index is in the range of indexes of the current view.
+         * If so, it replaces the actual view with the show label view for this specific notecard.
+         */
+        if(INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+            var PK = activateNotecards[INDEX - 1].pk;
+            window.location.replace('http://'+window.location.host+'/srs/notecard_label/'+PK+'/');
+        }
+    }
+
+    /**
+     * Executes the click for the selected notecard by the cursor.
+     */
+    function clickSelectedNotecard() {
+        /* Checks if the index exits.
+         * If so, it checks if the index is in the range of indexes of the current view.
+         */
+        if(INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+            document.getElementById('bottomDiv' + (INDEX - BOTTOM + 1)).click();
+        }
+    }
+
+    /**
+     * Replaces the view with the edit view for this notecard.
+     */
+    function replaceView() {
+        /* Checks if the index exits.
+         * If so, it checks if the index is in the range of indexes of the current view.
+         * If so, it replaces the actual view with the edit view for this specific notecard.
+         */
+        if(INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+            var PK = activateNotecards[INDEX - 1].pk;
+            window.location.replace('http://'+window.location.host+'/srs/edit_notecard/'+PK+'/');
+        }
+    }
+
+    /**
+     * Replaces the view with the edit view for this notecard.
+     */
+    function deactivate() {
+        /* Checks if the index exits.
+         * If so, it checks if the index is in the range of indexes of the current view.
+         * If so, it replaces the view to deactivate the actual notecard.
+         */
+        if(INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+            var PKTODELETE = activateNotecards[INDEX - 1].pk;
+            window.location.replace('http://'+window.location.host+'/srs/delete_notecard/'+PKTODELETE+'/');
+        }
+    }
+</script>
+    <div style="margin-top: 15%" title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
     <a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
-    <a><h2>Edit</h2></a>
     <a href="{% url 'create_notecard' pk=pk %}"><h2>Make</h2></a>
-    <a><h2>Delete</h2></a>
-    <a><h2>Select</h2></a>
-    <a><h2>Subject</h2></a>
-    <a><h2>Alpha</h2></a>
-    <a><h2>Revu</h2></a>
+    <a onclick="replaceView()"><h2>Edit</h2></a>
+    <a onclick="deactivate()"><h2>Delete</h2></a>
+    <a onclick="clickSelectedNotecard()"><h2>Select</h2></a>
     <a href="{% url 'import_notecard' pk=pk %}"><h2>Import</h2></a>
     <a href="{% url 'export_notecard' pk=pk %}"><h2>Export</h2></a>
-    <a><h2>Label</h2></a>
+    <a onclick="showSelectedNotecardLabel()"><h2>Label</h2></a>
     <a href="{% url 'notefile_detail' pk=pk %}"><h2>Back</h2></a>
 {% endblock %}
 
@@ -42,9 +92,38 @@ var notecards = ((temp).replace(/&(l|g|quo)t;/g, function(a,b){
                 }[b];
             }));
 notecards = JSON.parse(notecards); //ARRAY OF JSON OBJECTS.
-var MAX_TOP = notecards.length;
+
+// Array with the activate notecards.
+var activateNotecards = [];
+// Array with the deactivate notecards.
+var deactivateNotecards = [];
+
+// Fills activateNotecards and deactivateNotecards arrays.
+for(var i = 0; i < notecards.length; i++) {
+    if(notecards[i].fields.activate) {
+        activateNotecards.push(notecards[i]);
+    } else {
+        deactivateNotecards.push(notecards[i]);
+    }
+}
+
+// Sort deactivateNotecards by time in which they were deactivated.
+for(var i = deactivateNotecards.length - 1; i > 0; i--) {
+    for(var j = 0; j < i; j++) {
+        if(deactivateNotecards[j].fields.created_date < deactivateNotecards[j + 1].fields.created_date) {
+            var tempNotecard = deactivateNotecards[j];
+            deactivateNotecards[j] = deactivateNotecards[j + 1];
+            deactivateNotecards[j + 1] = tempNotecard;
+        }
+    }
+}
+
+// Set MAX_TOP as length of the activate notecards.
+var MAX_TOP = activateNotecards.length;
 </script>
+
 <script type="text/javascript" src="{% static 'js/notecard_navigate.js' %}"></script>
+
 <script>
     $(function(){
         var list = [
@@ -56,46 +135,67 @@ var MAX_TOP = notecards.length;
         $('#autocomplete').autocomplete({
             lookup: list,
             onSelect: function (suggestion) {
-                autocomplete_search(notecards, suggestion.value);
+                autocomplete_search(activateNotecards, suggestion.value);
                 document.getElementById('bottomDiv1').focus();
             }
         });
      });
 
     $("#autocomplete").keyup(function(){
-        autocomplete_search(notecards, $(this).val());
+        autocomplete_search(activateNotecards, $(this).val());
     });
 
     $("#autocomplete").change(function(){
-        autocomplete_search(notecards, $(this).val());
+        autocomplete_search(activateNotecards, $(this).val());
         document.getElementById('bottomDiv1').focus();
     });
 
-    function autocomplete_search(notecards, keyword){
+    /**
+     * Search in all active notecards for the keyword.
+     * Then, it substitutes the current view by the view with just notecards that contain the keyword.
+     *
+     * @param activateNotecards: Array with all notecards that are currently active.
+     * @param keyword: String to search in all active notecards.
+     */
+    function autocomplete_search(activateNotecards, keyword){
         BOTTOM = 5;
         sub_notecards = [];
-        for(i = 0; i < notecards.length; i++){
-            if(notecards[i].fields.keywords.toLowerCase().indexOf(keyword.toLowerCase()) !== -1){
-                sub_notecards.push(notecards[i]);
+        for(i = 0; i < activateNotecards.length; i++){
+            if(activateNotecards[i].fields.keywords.toLowerCase().indexOf(keyword.toLowerCase()) !== -1){
+                // This ith notecard contains the keyword.
+                sub_notecards.push(activateNotecards[i]);
             }
         }
         if(sub_notecards.length != 0){
-        MAX_TOP = sub_notecards.length;
-        BOTTOM = 1;
-        INDEX = 1;
-        TOP = ((MAX_TOP > 5 )? 5 : MAX_TOP);
-        load_notecards(sub_notecards);
+            MAX_TOP = sub_notecards.length;
+            BOTTOM = 1;
+            INDEX = 1;
+            TOP = ((MAX_TOP > 5 )? 5 : MAX_TOP);
+            // Loads view with notecards that contain the keyword.
+            load_notecards(sub_notecards);
         }
     }
 </script>
+
 <script>
+// Event listener to check for up or down key.
 window.addEventListener("keydown", function(e) {
   // space and arrow keys
   if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
       e.preventDefault();
   }
 }, false);
+
+//Event listener to check for Ctr + Z keys together.
+document.addEventListener("keydown", function (zEvent) {
+    if (zEvent.ctrlKey  &&  zEvent.code === "KeyZ" && deactivateNotecards.length > 0) {
+        var PKTOACTIVATE = deactivateNotecards[0].pk;
+        window.location.replace('http://'+window.location.host+'/srs/activate_notecard/'+PKTOACTIVATE+'/');
+
+    }
+} );
 </script>
+
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 {% endblock %}

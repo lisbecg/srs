@@ -1,0 +1,21 @@
+{% extends 'srs/base_srs.html' %}
+{% load staticfiles %}
+
+
+{% block site_content %}
+<a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
+<a href="{% url 'notecard_list' pk=pk %}"><h2>Back</h2></a>
+{% endblock %}
+
+{% block content %}
+    <div class="notecard">
+        <h2 style="margin-left: 40%">Label:</h2>
+        <p>{{ notecard.label }}</p>
+
+        <div class="backdrop"></div>
+    </div>
+
+    {% load static %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+{% endblock %}

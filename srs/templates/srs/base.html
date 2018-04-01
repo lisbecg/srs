@@ -55,16 +55,20 @@
     <div id="menubar">
       <ul id="menu">
         <li {% if request.path == "/" %} class="current" {% endif %} ><a href="{% url 'welcome' %}">Home</a></li>
+
         {% if user.is_authenticated %}
-        <li {% if "/srs/" in request.path %} class="current" {% endif %} ><a href="{% url 'selection_view' %}">SRS</a></li>
+          <li {% if "/srs/" in request.path %} class="current" {% endif %} ><a href="{% url 'selection_view' %}">SRS</a></li>
         {% endif %}
+
         <li {% if request.path == "/about/" %} class="current" {% endif %}><a href="{% url 'about' %}">About</a></li>
         <li {% if request.path == "/contact/" %} class="current" {% endif %}><a href="{% url 'contact' %}">Contact Us</a></li>
+
         {% if user.is_authenticated %}
+        <li><a href="{% url 'admin' %}">Admin</a></li>
         <li><a id="last_nav" href="{% url 'logout' %}">Logout</a></li>
         {% else %}
-        <li><a id="last_nav" href="{% url 'admin:index' %}">Login</a></li>
-
+          <li><a id="last_nav" href="{% url 'login' %}?next=/">Login</a></li>
+          <li><a id="last_nav" href="{% url 'create_account' %}">Sign Up</a></li>
         {% endif %}
       </ul>
     </div><!--close menubar-->
@@ -83,12 +87,12 @@
     </div><!--close site_content-->
 
   <div id="footer">
-    <p style='text-align: center;'>
+    <p style='text-align: center; color: black;'>
         <span style='margin-bottom: 1em; display: block'>
-            Version 2.0 December 2017
+            Version 3.0 April 2018
         </span>
         <span>
-            &copy;Copyright 2017. All rights reserved.
+            &copy;Copyright 2018. All rights reserved.
         </span>
     </p>
   </div><!--close footer-->

@@ -1,0 +1,131 @@
+{% extends 'srs/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+		<h2>Duplicate Notecard</h2>
+	  <form method="POST">{% csrf_token %}
+	      {{ form.as_p }}
+				<a id="open-btn" class="space-fix insert btn btn-default">Insert Equation</a>
+				<a id="open-btn2" class="insert-link btn btn-default">Insert Link</a>
+
+				<!-- Equation Selector -->
+				{% if equations %}
+          <h2>Equations:</h2>
+					<p><i>Please select which equations you'd like to copy over</i></p>
+					<div id="equations">
+	          {% for equation in equations %}
+							<p class="inline-block full-width equation-left">
+	              <input type="checkbox" name="{{equation.pk}}"/> {% autoescape off %}{{equation.equation}}{% endautoescape %}
+							</p>
+	          {% endfor %}
+					</div>
+        {% endif %}
+
+        {% if images %}
+          <h2 class="top-margin">Images:</h2>
+					<p><i>Please select which images you'd like to copy over</i></p>
+					<div id="images">
+	          {% for image in images %}
+							<p class="inline-block full-width">
+	              <input type="checkbox" name="{{image.pk}}"/> {{image.name}}
+							</p>
+	          {% endfor %}
+					</div>
+        {% endif %}
+
+        {% if videos %}
+          <h2 class="top-margin">Videos:</h2>
+					<p><i>Please select which videos you'd like to copy over</i></p>
+					<div id="videos">
+	          {% for video in videos %}
+							<p class="inline-block full-width">
+	              <input type="checkbox" name="{{video.pk}}"/> {{video.title}}
+							</p>
+	          {% endfor %}
+					</div>
+        {% endif %}
+
+        {% if audios %}
+          <h2 class="top-margin">Audio:</h2>
+					<p><i>Please select which audio you'd like to copy over</i></p>
+					<div id="audios">
+	          {% for audio in audios %}
+							<p class="inline-block full-width">
+	              <input type="checkbox" name="{{audio.pk}}"/> {{audio.title}}
+							</p>
+	          {% endfor %}
+					</div>
+        {% endif %}
+
+        {% if documents %}
+          <h2 class="top-margin">Documents:</h2>
+					<p><i>Please select which documents you'd like to copy over</i></p>
+					<div id="documents">
+	          {% for document in documents %}
+							<p class="inline-block full-width">
+	              <input type="checkbox" name="{{document.pk}}"/> {{document.name}}
+							</p>
+	          {% endfor %}
+					</div>
+        {% endif %}
+
+				<button id="submit" type="submit" class="hidden save btn btn-default">Save</button>
+				<a id="fakeSubmit" type="submit" class="space-fix2 save btn btn-default">Save</a>
+	      <a href="{% url 'notecard_detail' pk=pk %}" class="cancel btn btn-default">Cancel</a>
+	  </form>
+
+		<!-- Equation Modal -->
+    <div id="eqnmodal" class="modal equation-modal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="close-btn" class="close_btn btn">Close</button>
+                    <h2 class="eqn-modal-title">Insert Equation</h2>
+                </div>
+                <div class="modal-body">
+                    <div style="padding-top: 25px; height: 297px; width: 710px;" id="editorContainer"></div>
+										<div class="text-center">
+											<button id="insert-btn" class="insert btn">Insert</button>
+										</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+		<!-- Link Modal -->
+		<div id="linkmodal" class="modal link-modal" role="dialog">
+				<div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+								<div class="modal-header">
+										<button id="close-btn2" class="close_btn btn">Close</button>
+										<h2 class="link-modal-title">Insert Link</h2>
+								</div>
+								<div class="modal-body">
+										<p>Display Text</p>
+										<input id="display" type="text" class="form-control">
+										<p class="top-pad">Link URL</p>
+										<input id="url" type="text" class="form-control">
+										<p id="err" class="error text-center hidden">You must fill out both fields!</p>
+										<div class="text-center top-pad">
+											<button id="insert-btn2" class="btn insert-link">Insert</button>
+										</div>
+								</div>
+						</div>
+
+				</div>
+		</div>
+
+		<div class="backdrop"></div>
+
+		<script src = "http://www.wiris.net/demo/editor/editor"></script>
+		<script src="{% static 'js/insertEquation.js' %}"></script>
+		<script src="{% static 'js/insertLink.js' %}"></script>
+		<script src="{% static 'js/duplicateCheck.js' %}"></script>
+		<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+{% endblock %}

@@ -3,7 +3,7 @@
 {% block site_content %}
 	<a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
     <a href="{% url 'import_notecard' pk=pk %}"><h2>Import</h2></a>
-    <a><h2>Make</h2></a>
+    <a href="{% url 'create_notecard' pk=pk %}"><h2>Make</h2></a>
     <a><h2>Label</h2></a>
     <a href="{% url 'notefile_detail' pk=pk %}"><h2>Back</h2></a>
 {% endblock %}

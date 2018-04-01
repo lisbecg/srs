@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Add Document</h2>
-    <p>The source for the document can be a local file or an online file URL.</p>
-    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+    <h2>Add image</h2>
+    <p>The source for the image can be a local image file or a image URL.</p>
+    <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
         <a href="{% url 'notecard_detail' pk=pk %}" class="cancel btn btn-default">Cancel</a>
-        {% if badFile %}
+        {% if badSource %}
             <p class="error">Error: The source you entered is invalid!</p>
         {% endif %}
         {% if badType %}
-            <p class="error">Error: The file must be a document, pdf, powerpoint, or excel sheet!</p>
+            <p class="error">Error: The file must be an image!</p>
         {% endif %}
     </form>
 {% endblock %}
