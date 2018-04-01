@@ -58,13 +58,10 @@
 </script>
     <div style="margin-top: 15%" title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
     <a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
-    <a onclick="replaceView()"><h2>Edit</h2></a>
     <a href="{% url 'create_notecard' pk=pk %}"><h2>Make</h2></a>
+    <a onclick="replaceView()"><h2>Edit</h2></a>
     <a onclick="deactivate()"><h2>Delete</h2></a>
     <a onclick="clickSelectedNotecard()"><h2>Select</h2></a>
-    <!--<a><h2>Subject</h2></a>-->
-    <!--<a><h2>Alpha</h2></a>-->
-    <!--<a><h2>Revu</h2></a>-->
     <a href="{% url 'import_notecard' pk=pk %}"><h2>Import</h2></a>
     <a href="{% url 'export_notecard' pk=pk %}"><h2>Export</h2></a>
     <a onclick="showSelectedNotecardLabel()"><h2>Label</h2></a>

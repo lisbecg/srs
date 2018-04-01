@@ -8,7 +8,7 @@ from django.contrib.auth import views as view_auth
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    url(r'^admin$', RedirectView.as_view(url='/admin'), name='admin'),
+    url(r'^admin/$', RedirectView.as_view(url='/admin/'), name='admin'),
     url(r'^$', views.welcome_text, name='welcome'),
 	url(r'^create_account/', views.create_account, name='create_account'),
 	url(r'^login/', view_auth.login, name="login"),
