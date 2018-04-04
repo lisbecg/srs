@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+# Import socket to read host name
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's+57^&l=!jkx@=e$5_ni=6q@d7^s&i%=ksbba&^!u0&z98q7#5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '*']
 
@@ -75,12 +77,58 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+# If the host name starts with 'live', DJANGO_HOST = "production"
+# Else if host name starts with 'test', set DJANGO_HOST = "test"
+# If host doesn't match, assume it's a development server, set DJANGO_HOST = "development"
+if socket.gethostname().startswith('live'):
+    DJANGO_HOST = "production"
+elif socket.gethostname().startswith('test'):
+    DJANGO_HOST = "testing"
+else:
+    DJANGO_HOST = "development"
+
+
+
+# Define general behavior variables for DJANGO_HOST and all others
+# Define DATABASES variable for DJANGO_HOST and all others
+# Define CACHES variable for DJANGO_HOST production and all other hosts
+if DJANGO_HOST == "production":
+    DEBUG = False
+    STATIC_URL = 'http://srs-prod.cise.ufl.edu'
+
+    # Use mysql for live host
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': databaseName,
+            'USER': userName,
+            'PASSWORD': password,
+        }
     }
-}
+
+    # Set cache
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+            'TIMEOUT':'1800',
+        }
+    }
+    CACHE_MIDDLEWARE_SECONDS = 1800
+else:
+    DEBUG = True
+    STATIC_URL = '/static/'
+
+    # Use sqlite for non live host
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+
 
 
 # Password validation
@@ -119,7 +167,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static') #Path for static files
 
 MEDIA_URL = '/media/'
