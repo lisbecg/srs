@@ -81,9 +81,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # If the host name starts with 'live', DJANGO_HOST = "production"
 # Else if host name starts with 'test', set DJANGO_HOST = "test"
 # If host doesn't match, assume it's a development server, set DJANGO_HOST = "development"
-if socket.gethostname().startswith('live'):
+
+if socket.gethostname().endswith('-prod'):
     DJANGO_HOST = "production"
-elif socket.gethostname().startswith('test'):
+elif socket.gethostname().endswith('-test'):
     DJANGO_HOST = "testing"
 else:
     DJANGO_HOST = "development"
@@ -95,7 +96,7 @@ else:
 # Define CACHES variable for DJANGO_HOST production and all other hosts
 if DJANGO_HOST == "production":
     DEBUG = False
-    STATIC_URL = 'http://srs-prod.cise.ufl.edu'
+    STATIC_URL = '/static/'
 
     # Use mysql for live host
     DATABASES = {
