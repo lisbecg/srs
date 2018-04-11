@@ -19,6 +19,7 @@ urlpatterns = [
 	url(r'^srs/notefile_list', views.notefile_list, name='notefile_list'),
 	url(r'^srs/notefile/(?P<pk>\d+)/$', views.notefile_detail, name='notefile_detail'),
 	url(r'^srs/notecard_list/(?P<pk>\d+)/$', views.notecard_list, name='notecard_list'),
+    url(r'^srs/notecard_list_empty/(?P<pk>\d+)/$', views.notecard_list, name='notecard_list_empty'),
 	url(r'^srs/import_notecard/(?P<pk>\d+)/$', views.import_notecard, name='import_notecard'),
 	url(r'^srs/export_notecard/(?P<pk>\d+)/$', views.export_notecard, name='export_notecard'),
 	url(r'^srs/notecard/(?P<pk>\d+)/$', views.notecard_detail, name='notecard_detail'),
