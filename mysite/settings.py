@@ -102,9 +102,9 @@ if DJANGO_HOST == "production":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': databaseName,
-            'USER': userName,
-            'PASSWORD': password,
+            'OPTIONS': {
+                'read_default_file': 'my.cnf',
+            },
         }
     }
 
