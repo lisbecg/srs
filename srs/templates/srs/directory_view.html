@@ -47,4 +47,33 @@
         {% endfor %}
     </div>
 
+<script>
+    //Event listener to select the corresponding action.
+    document.addEventListener("keydown", function (zEvent) {
+        // Get current directory pk.
+        var directoryPK = "{{pk}}";
+
+        if (zEvent.code === "KeyR") {
+            window.location.replace('http://'+window.location.host+'/srs/');
+        } else if (zEvent.code === "KeyD") {
+            window.location.replace('http://'+window.location.host+'/srs/create_directory/'+directoryPK);
+        } else if (zEvent.code === "KeyN") {
+            window.location.replace('http://'+window.location.host+'/srs/create_notefile/'+directoryPK);
+        } else if (zEvent.code === "KeyB") {
+            // Get parent.
+            var parent = "{{parent}}";
+            if (parent != null) {
+                // Get parent directory.
+                var parentDirectory = "{{parent.parent_directory}}";
+                if (parentDirectory == null) {
+                    window.location.replace('http://'+window.location.host+'/srs/directory_list/');
+                } else {
+                    // Get parent directory pk.
+                    var parentDirectoryPK = "{{parent.pk}}";
+                    window.location.replace('http://'+window.location.host+'/srs/directory_list/'+parentDirectoryPK);
+                }
+            }
+        }
+    } );
+</script>
 {% endblock %}

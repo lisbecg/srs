@@ -43,4 +43,13 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
     <script type="text/javascript" src="{% static 'js/loadAudio.js' %}"></script>
+
+<script>
+    //Event listener to select the corresponding action.
+    document.addEventListener("keydown", function (zEvent) {
+        if (zEvent.code === "KeyR") {
+            window.location.replace('http://'+window.location.host+'/srs/');
+        }
+    } );
+</script>
 {% endblock %}

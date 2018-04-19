@@ -12,4 +12,13 @@
 			</div>
 		</a>
     {% endfor %}
+
+<script>
+    //Event listener to select the corresponding action.
+    document.addEventListener("keydown", function (zEvent) {
+        if (zEvent.code === "KeyR") {
+            window.location.replace('http://'+window.location.host+'/srs/');
+        }
+    } );
+</script>
 {% endblock %}

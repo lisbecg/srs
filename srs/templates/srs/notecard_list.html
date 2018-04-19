@@ -58,7 +58,7 @@
 </script>
     <div style="margin-top: 15%" title="search_bar"><input type="text" id="autocomplete" placeholder="Enter Keywords"></div>
     <a href="{% url 'selection_view' %}"><h2>Return to View Select</h2></a>
-    <a href="{% url 'create_notecard' pk=pk %}"><h2>Make</h2></a>
+    <a href="{% url 'create_notecard' pk=pk %}"><h2>Create</h2></a>
     <a onclick="replaceView()"><h2>Edit</h2></a>
     <a onclick="deactivate()"><h2>Delete</h2></a>
     <a onclick="clickSelectedNotecard()"><h2>Select</h2></a>
@@ -186,12 +186,35 @@ window.addEventListener("keydown", function(e) {
   }
 }, false);
 
-//Event listener to check for Ctr + Z keys together.
+//Event listener to check for Ctrl + Z keys together.
 document.addEventListener("keydown", function (zEvent) {
+    // Get parent notefile pk.
+    var notefilePK = "{{pk}}";
+
+    // Activate the last notecard that was deactivated or select the corresponding action.
     if (zEvent.ctrlKey  &&  zEvent.code === "KeyZ" && deactivateNotecards.length > 0) {
         var PKTOACTIVATE = deactivateNotecards[0].pk;
         window.location.replace('http://'+window.location.host+'/srs/activate_notecard/'+PKTOACTIVATE+'/');
-
+    } else if (zEvent.code === "KeyR") {
+        window.location.replace('http://'+window.location.host+'/srs/');
+    } else if (zEvent.code === "KeyC") {
+        window.location.replace('http://'+window.location.host+'/srs/create_notecard/'+notefilePK);
+    } else if (zEvent.code === "KeyE") {
+        replaceView();
+    } else if (zEvent.code === "KeyD") {
+        deactivate();
+    } else if (zEvent.code === "KeyS") {
+        clickSelectedNotecard();
+    } else if (zEvent.code === "KeyI") {
+        window.location.replace('http://'+window.location.host+'/srs/import_notecard/'+notefilePK);
+    } else if (zEvent.code === "KeyX" && INDEX && MAX_TOP && BOTTOM && INDEX >= BOTTOM && INDEX <= MAX_TOP) {
+        // Get selected notecard pk.
+        var PK = activateNotecards[INDEX - 1].pk;
+        window.location.replace('http://'+window.location.host+'/srs/export_notecard/'+PK);
+    } else if (zEvent.code === "KeyL") {
+        showSelectedNotecardLabel();
+    } else if (zEvent.code === "KeyB") {
+        window.location.replace('http://'+window.location.host+'/srs/notefile/'+notefilePK);
     }
 } );
 </script>

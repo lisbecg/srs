@@ -10,4 +10,21 @@
     <div class="notefile">
         <p>{{ notefile.name }}</p>
     </div>
+
+<script>
+    //Event listener to select the corresponding action.
+    document.addEventListener("keydown", function (zEvent) {
+        if (zEvent.code === "KeyR") {
+            window.location.replace('http://' + window.location.host + '/srs/');
+        }else if (zEvent.code === "KeyM") {
+            // Get current notefile pk.
+            var notefilePK = "{{notefile.pk}}";
+            window.location.replace('http://'+window.location.host+'/srs/notecard_list/'+notefilePK);
+        } else if (zEvent.code === "KeyB") {
+            // Get parent directory pk.
+            var directoryPK = "{{notefile.directory.pk}}";
+            window.location.replace('http://'+window.location.host+'/srs/directory_list/'+directoryPK);
+        }
+    } );
+</script>
 {% endblock %}
