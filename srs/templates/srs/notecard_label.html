@@ -15,6 +15,19 @@
         <div class="backdrop"></div>
     </div>
 
+<script>
+    document.addEventListener("keydown", function (zEvent) {
+        // Select the corresponding action.
+        if (zEvent.code === "KeyR") {
+            window.location.replace('http://'+window.location.host+'/srs/');
+        } else if (zEvent.code === "KeyB") {
+            // Get parent notefile pk.
+            var notefilePK = "{{pk}}";
+            window.location.replace('http://'+window.location.host+'/srs/notecard_list/'+notefilePK);
+        }
+    } );
+</script>
+
     {% load static %}
     <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>

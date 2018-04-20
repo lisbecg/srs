@@ -166,6 +166,7 @@ def edit_notecard(request, pk):
         if form.is_valid():
             notecard = form.save(commit=False)
             notecard.author = request.user
+            notecard.created_date = timezone.now()
             notecard.save()
             return redirect('notecard_list', pk=parentPK)
     else:
@@ -349,6 +350,10 @@ def notecard_list(request, pk):
 def notecard_detail(request, pk):
     notecard = get_object_or_404(Notecard, pk=pk)
 
+    # Save modified time
+    notecard.created_date = timezone.now()
+    notecard.save()
+
     # calculate path
     notefile_Name = notecard.notefile
     path = getPath(request, notefile_Name.directory) + notefile_Name.name + "/"
@@ -369,6 +374,10 @@ def notecard_detail(request, pk):
 @login_required
 def notecard_label(request, pk):
     notecard = get_object_or_404(Notecard, pk=pk)
+
+    # Save modified time
+    notecard.created_date = timezone.now()
+    notecard.save()
 
     # calculate path
     notefile_Name = notecard.notefile

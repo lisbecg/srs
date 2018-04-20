@@ -118,6 +118,17 @@ for(var i = deactivateNotecards.length - 1; i > 0; i--) {
     }
 }
 
+// Sort activateNotecards by time in which they were created, modified, or inspected.
+for(var i = activateNotecards.length - 1; i > 0; i--) {
+    for(var j = 0; j < i; j++) {
+        if(activateNotecards[j].fields.created_date < activateNotecards[j + 1].fields.created_date) {
+            var temp_notecard = activateNotecards[j];
+            activateNotecards[j] = activateNotecards[j + 1];
+            activateNotecards[j + 1] = temp_notecard;
+        }
+    }
+}
+
 // Set MAX_TOP as length of the activate notecards.
 var MAX_TOP = activateNotecards.length;
 </script>

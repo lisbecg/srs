@@ -10,7 +10,7 @@
     <a href="{% url 'create_document' pk=notecard.pk %}" class="top-menu"><h2>Add Document &nbsp;&nbsp;<i class="fa fa-file"></i></h2></a>
     <a href="{% url 'duplicate_notecard' pk=notecard.pk %}" class="top-menu"><h2>Duplicate Notecard</h2></a>
     <a href="{% url 'notecard_list' pk=pk %}"><h2>Back</h2></a>
-    <a ><h2>Help</h2></a>
+    <!--<a ><h2>Help</h2></a>-->
 {% endblock %}
 
 {% block content %}
@@ -172,6 +172,35 @@
         <div class="backdrop"></div>
 
     </div>
+
+
+    <script>
+        document.addEventListener("keydown", function (zEvent) {
+            // Get parent notefile pk.
+            var notecardPK = "{{notecard.pk}}";
+
+            // Select the corresponding action.
+            if (zEvent.code === "KeyR") {
+                window.location.replace('http://'+window.location.host+'/srs/');
+            } else if (zEvent.code === "KeyE") {
+                window.location.replace('http://'+window.location.host+'/srs/create_equation/'+notecardPK);
+            } else if (zEvent.code === "KeyI") {
+                window.location.replace('http://'+window.location.host+'/srs/create_image/'+notecardPK);
+            } else if (zEvent.code === "KeyV") {
+                window.location.replace('http://'+window.location.host+'/srs/create_video/'+notecardPK);
+            } else if (zEvent.code === "KeyA") {
+                window.location.replace('http://'+window.location.host+'/srs/create_audio/'+notecardPK);
+            } else if (zEvent.code === "KeyD") {
+                window.location.replace('http://'+window.location.host+'/srs/create_document/'+notecardPK);
+            } else if (zEvent.code === "KeyU") {
+                window.location.replace('http://'+window.location.host+'/srs/duplicate_notecard/'+notecardPK);
+            } else if (zEvent.code === "KeyB") {
+                // Get parent notefile pk.
+                var notefilePK = "{{pk}}";
+                window.location.replace('http://'+window.location.host+'/srs/notecard_list/'+notefilePK);
+            }
+        } );
+    </script>
 
     {% load static %}
     <script type="text/javascript" src="{% static 'js/loadImage.js' %}"></script>
