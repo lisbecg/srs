@@ -18,13 +18,13 @@
         // Get parent notefile pk.
         var notefilePK = "{{pk}}";
 
-        if (zEvent.code === "KeyR") {
+        if (zEvent.altKey && zEvent.code === "KeyR") {
             window.location.replace('http://'+window.location.host+'/srs/');
-        } else if (zEvent.code === "KeyC") {
+        } else if (zEvent.altKey && zEvent.code === "KeyC") {
             window.location.replace('http://'+window.location.host+'/srs/create_notecard/'+notefilePK);
-        } else if (zEvent.code === "KeyI") {
+        } else if (zEvent.altKey && zEvent.code === "KeyI") {
             window.location.replace('http://'+window.location.host+'/srs/import_notecard/'+notefilePK);
-        } else if (zEvent.code === "KeyB") {
+        } else if (zEvent.altKey && zEvent.code === "KeyB") {
             window.location.replace('http://'+window.location.host+'/srs/notefile/'+notefilePK);
         }
     } );

@@ -53,13 +53,13 @@
         // Get current directory pk.
         var directoryPK = "{{pk}}";
 
-        if (zEvent.code === "KeyR") {
+        if (zEvent.altKey && zEvent.code === "KeyR") {
             window.location.replace('http://'+window.location.host+'/srs/');
-        } else if (zEvent.code === "KeyD") {
+        } else if (zEvent.altKey && zEvent.code === "KeyD") {
             window.location.replace('http://'+window.location.host+'/srs/create_directory/'+directoryPK);
-        } else if (zEvent.code === "KeyN") {
+        } else if (zEvent.altKey && zEvent.code === "KeyN") {
             window.location.replace('http://'+window.location.host+'/srs/create_notefile/'+directoryPK);
-        } else if (zEvent.code === "KeyB") {
+        } else if (zEvent.altKey && zEvent.code === "KeyB") {
             // Get parent.
             var parent = "{{parent}}";
             if (parent != null) {

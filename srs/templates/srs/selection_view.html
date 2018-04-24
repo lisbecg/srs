@@ -12,17 +12,17 @@
 <script>
     //Event listener to select the corresponding action.
     document.addEventListener("keydown", function (zEvent) {
-        if (zEvent.code === "KeyD") {
+        if (zEvent.altKey && zEvent.code === "KeyD") {
             window.location.replace('http://'+window.location.host+'/srs/directory_list/');
-        } else if (zEvent.code === "KeyN") {
+        } else if (zEvent.altKey && zEvent.code === "KeyN") {
             window.location.replace('http://'+window.location.host+'/srs/notefile_list');
-        } else if (zEvent.code === "KeyI") {
+        } else if (zEvent.altKey && zEvent.code === "KeyI") {
             window.location.replace('http://'+window.location.host+'/srs/image_archive/');
-        } else if (zEvent.code === "KeyV") {
+        } else if (zEvent.altKey && zEvent.code === "KeyV") {
             window.location.replace('http://'+window.location.host+'/srs/video_archive/');
-        } else if (zEvent.code === "KeyA") {
+        } else if (zEvent.altKey && zEvent.code === "KeyA") {
             window.location.replace('http://'+window.location.host+'/srs/audio_archive/');
-        } else if (zEvent.code === "KeyO") {
+        } else if (zEvent.altKey && zEvent.code === "KeyO") {
             window.location.replace('http://'+window.location.host+'/srs/document_archive/');
         }
     } );

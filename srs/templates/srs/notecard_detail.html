@@ -180,21 +180,21 @@
             var notecardPK = "{{notecard.pk}}";
 
             // Select the corresponding action.
-            if (zEvent.code === "KeyR") {
+            if (zEvent.altKey && zEvent.code === "KeyR") {
                 window.location.replace('http://'+window.location.host+'/srs/');
-            } else if (zEvent.code === "KeyE") {
+            } else if (zEvent.altKey && zEvent.code === "KeyE") {
                 window.location.replace('http://'+window.location.host+'/srs/create_equation/'+notecardPK);
-            } else if (zEvent.code === "KeyI") {
+            } else if (zEvent.altKey && zEvent.code === "KeyI") {
                 window.location.replace('http://'+window.location.host+'/srs/create_image/'+notecardPK);
-            } else if (zEvent.code === "KeyV") {
+            } else if (zEvent.altKey && zEvent.code === "KeyV") {
                 window.location.replace('http://'+window.location.host+'/srs/create_video/'+notecardPK);
-            } else if (zEvent.code === "KeyA") {
+            } else if (zEvent.altKey && zEvent.code === "KeyA") {
                 window.location.replace('http://'+window.location.host+'/srs/create_audio/'+notecardPK);
-            } else if (zEvent.code === "KeyD") {
+            } else if (zEvent.altKey && zEvent.code === "KeyD") {
                 window.location.replace('http://'+window.location.host+'/srs/create_document/'+notecardPK);
-            } else if (zEvent.code === "KeyU") {
+            } else if (zEvent.altKey && zEvent.code === "KeyU") {
                 window.location.replace('http://'+window.location.host+'/srs/duplicate_notecard/'+notecardPK);
-            } else if (zEvent.code === "KeyB") {
+            } else if (zEvent.altKey && zEvent.code === "KeyB") {
                 // Get parent notefile pk.
                 var notefilePK = "{{pk}}";
                 window.location.replace('http://'+window.location.host+'/srs/notecard_list/'+notefilePK);
